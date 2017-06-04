@@ -1,0 +1,13 @@
+{
+  "name": "slate-idb-store",
+  "authors": [
+    "Jean-François Le Foll <jeff.lefoll@outlook.fr>"
+  ],
+  "description": "Polymer 2 Element wrapping Idb API for Indexed DB",
+  "version": "1.0.0",
+  "repository": "JeffLeFoll/slate-idb-store",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "chai-as-promised": "^6.0.0"
+  }
+}

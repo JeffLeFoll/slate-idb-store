@@ -1,0 +1,149 @@
+<link rel="import" href="./bower_components/polymer/polymer-element.html">
+
+<script src="./bower_components/idb/lib/idb.js"></script>
+
+<dom-module id="slate-idb-store">
+    <template>
+        <style></style>
+    </template>
+    <script>
+        class SlateIdbStore extends Polymer.Element {
+            static get is() { return 'slate-idb-store'; }
+
+            static get properties() {
+                return {
+                    dbName: {
+                        type: String
+                    },
+                    objectStore: {
+                        type: String
+                    },
+                    version: {
+                        type: String,
+                        default: "1"
+                    },
+                    optionalParameters: {
+                        type: Object
+                    }
+                }
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+
+                this._dbPromise = idb.open(this.dbName, this.version, upgradeDB => {
+                    upgradeDB.createObjectStore(this.objectStore, this.optionalParameters);
+                });
+            }
+
+            deleteDatabase() {
+                return idb.delete(this.dbName);
+            }
+
+            get(id) {
+                return this._dbPromise.then(db => {
+                    return db.transaction(this.objectStore)
+                        .objectStore(this.objectStore).get(id);
+                });
+            }
+
+            getAll() {
+                return this._dbPromise.then(db => {
+                    return db.transaction(this.objectStore)
+                        .objectStore(this.objectStore).getAll();
+                });
+            }
+
+            count() {
+                return this._dbPromise.then(db => {
+                    return db.transaction(this.objectStore)
+                        .objectStore(this.objectStore).count();
+                });
+            }
+
+            delete(key) {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore, 'readwrite');
+                    tx.objectStore(this.objectStore).delete(key);
+                    return tx.complete;
+                });
+            }
+
+            clear() {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore, 'readwrite');
+                    tx.objectStore(this.objectStore).clear();
+                    return tx.complete;
+                });
+            }
+
+            add(val, key) {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore, 'readwrite');
+                    tx.objectStore(this.objectStore).add(val, key);
+                    return tx.complete;
+                });
+            }
+
+            put(val, key) {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore, 'readwrite');
+                    tx.objectStore(this.objectStore).put(val, key);
+                    return tx.complete;
+                });
+            }
+
+            getKeys() {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore);
+                    let store = tx.objectStore(this.objectStore)
+                    let keys = [];
+
+                    // This would be store.getAllKeys(), but it isn't supported by Edge or Safari.
+                    // openKeyCursor isn't supported by Safari, so we fall back
+                    (store.iterateKeyCursor || store.iterateCursor).call(store, cursor => {
+                        if (!cursor) return;
+                        keys.push(cursor.key);
+                        cursor.continue();
+                    });
+
+                    return tx.complete.then(() => keys);
+                });
+            }
+
+            createIndex(indexName, keyName, options) {
+                return this._dbPromise.then(db => {
+                    return db.transaction(this.objectStore)
+                        .objectStore(this.objectStore)
+                        .createIndex(indexName, keyName, options);
+                });
+            }
+
+            deleteIndex(indexName) {
+                this._dbPromise.then(db => {
+                    db.transaction(this.objectStore)
+                        .objectStore(this.objectStore)
+                        .deleteIndex(indexName);
+                });
+            }
+
+            iterateCursor(callback) {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore, "readonly");
+                    tx.objectStore(this.objectStore).iterateCursor(callback);
+                    return tx.complete
+                });
+            }
+
+            iterateKeyCursor(callback) {
+                return this._dbPromise.then(db => {
+                    let tx = db.transaction(this.objectStore, "readonly");
+                    tx.objectStore(this.objectStore).iterateKeyCursor(callback);
+                    return tx.complete
+                });
+            }
+        }
+
+        window.customElements.define(SlateIdbStore.is, SlateIdbStore);
+    </script>
+</dom-module>

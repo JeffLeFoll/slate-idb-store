@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>slate-idb-store tests</title>
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <script src="../bower_components/slate-chai-as-promised-bundle/slate-chaiAsPromised-bundle.js"></script>
+
+    <link rel="import" href="../slate-idb-store.html">
+</head>
+
+<body>
+    <test-fixture id="StoreDefaultOptions">
+        <template>
+            <slate-idb-store db-name="slate-idb-store-tests" object-store="unit-tests"></slate-idb-store>
+        </template>
+    </test-fixture>
+
+    <script>
+        chai.should();
+
+        describe('store with default options', () => {
+            
+            var myDb;
+            before(function () {
+                myDb = fixture('StoreDefaultOptions');
+            });
+
+            after(function () {
+                myDb.deleteDatabase();
+            });
+
+            beforeEach(function () {
+                myDb.clear();
+            });
+
+            it('Should add 3 values', () => {
+                myDb.add('value 1', 1);
+                myDb.add('value 2', 2);
+                myDb.add('value 3', 3);
+
+                return myDb.count().should.eventually.equal(3);
+            });
+
+            it('Should update an existing value', () => {
+                
+                myDb.add('value 1', 1);
+
+                myDb.put('value 2', 1);
+
+                return Promise.all([
+                    myDb.count().should.eventually.equal(1),
+                    myDb.get(1).should.eventually.equal('value 2')
+                ])
+            });
+
+        });
+    </script>
+</body>
+
+</html>
