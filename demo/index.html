@@ -61,27 +61,20 @@ Copyright (c) 2017 Jean-François Le Foll "JeffLeFoll"
     <h4>Icons</h4>
     <demo-snippet>
       <template>
-        <dom-module id="slate-font-awesome-example">
+        <dom-module id="slate-idb-store-default">
           <template>
-            <style include="slate-font-awesome"></style>
-            <i class="fa fa-camera-retro lg"></i> fa-lg <br>
-            <i class="fa fa-camera-retro fa-2x"></i> fa-2x <br>
-            <i class="fa fa-camera-retro fa-3x"></i> fa-3x <br>
-            <i class="fa fa-fighter-jet fa-spin fa-3x fa-fw"></i> Top Gun Style :) <br>
-            <span class="fa-stack fa-lg">
-              <i class="fa fa-camera fa-stack-1x"></i>
-              <i class="fa fa-ban fa-stack-2x" style="color: red;"></i>
-            </span> fa-ban on fa-camera
+            <style></style>
+
           </template>
 
           <script>
-            class SlateFontAwesomeExample extends Polymer.Element {
-              static get is() { return 'slate-font-awesome-example'; }
+            class SlateIdbStoreDefault extends Polymer.Element {
+              static get is() { return 'slate-idb-store-default'; }
             }
-            window.customElements.define(SlateFontAwesomeExample.is, SlateFontAwesomeExample);
+            window.customElements.define(SlateIdbStoreDefault.is, SlateIdbStoreDefault);
           </script>
         </dom-module>
-        <slate-font-awesome-example></slate-font-awesome-example>
+        <slate-idb-store-default></slate-idb-store-default>
       </template>
     </demo-snippet>
   </div>
