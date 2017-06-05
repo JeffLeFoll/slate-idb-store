@@ -26,12 +26,6 @@
             connectedCallback() {
                 super.connectedCallback();
 
-                console.log('dbName: ' + this.dbName);
-                console.log('objectStore: ' + this.objectStore);
-                console.log('upgradeCallback: ' + this.upgradeCallback);
-
-
-
                 if (this.upgradeCallback) {
                     this._dbPromise = idb.open(this.dbName, this.version, upgradeDb => this.upgradeCallback(upgradeDb));
                 } else {
