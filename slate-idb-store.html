@@ -1,6 +1,6 @@
-<link rel="import" href="./bower_components/polymer/polymer-element.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
-<script src="./bower_components/idb/lib/idb.js"></script>
+<script src="../idb/lib/idb.js"></script>
 
 <dom-module id="slate-idb-store">
     <template>
@@ -12,22 +12,14 @@
 
             static get properties() {
                 return {
-                    dbName: {
-                        type: String
-                    },
-                    objectStore: {
-                        type: String
-                    },
+                    dbName: String,
+                    objectStore: String,
                     version: {
                         type: String,
                         default: "1"
                     },
-                    upgradeCallback: {
-                        type: Function
-                    },
-                    optionalParameters: {
-                        type: Object
-                    }
+                    upgradeCallback: Function,
+                    optionalParameters: Object
                 }
             }
 
@@ -36,8 +28,8 @@
 
                 console.log('dbName: ' + this.dbName);
                 console.log('objectStore: ' + this.objectStore);
-                console.log('optionalParameters: ' + this.optionalParameters);
-                
+                console.log('upgradeCallback: ' + this.upgradeCallback);
+
 
 
                 if (this.upgradeCallback) {

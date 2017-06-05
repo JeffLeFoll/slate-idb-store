@@ -16,6 +16,8 @@
   "homepage": "https://github.com/JeffLeFoll/slate-idb-store",
   "ignore": [],
   "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "idb": "jakearchibald/idb#^2.0.3"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#2.0.0",
@@ -23,7 +25,6 @@
     "paper-styles": "PolymerElements/paper-styles#2.0.0",
     "test-fixture": "PolymerElements/test-fixture#^3.0.0",
     "web-component-tester": "^6.0.0",
-    "idb": "jakearchibald/idb#^2.0.3",
     "slate-chai-as-promised-bundle": "^1.0.0"
   },
   "demos": {
