@@ -22,6 +22,9 @@
                         type: String,
                         default: "1"
                     },
+                    upgradeCallback: {
+                        type: Function
+                    },
                     optionalParameters: {
                         type: Object
                     }
@@ -31,9 +34,21 @@
             connectedCallback() {
                 super.connectedCallback();
 
-                this._dbPromise = idb.open(this.dbName, this.version, upgradeDB => {
-                    upgradeDB.createObjectStore(this.objectStore, this.optionalParameters);
-                });
+                console.log('dbName: ' + this.dbName);
+                console.log('objectStore: ' + this.objectStore);
+                console.log('optionalParameters: ' + this.optionalParameters);
+                
+
+
+                if (this.upgradeCallback) {
+                    this._dbPromise = idb.open(this.dbName, this.version, upgradeDb => this.upgradeCallback(upgradeDb));
+                } else {
+                    this._dbPromise = idb.open(this.dbName, this.version, upgradeDb => this._defaultUpgradeCallback(upgradeDb));
+                }
+            }
+
+            _defaultUpgradeCallback(upgradeDB) {
+                upgradeDB.createObjectStore(this.objectStore, this.optionalParameters);
             }
 
             deleteDatabase() {

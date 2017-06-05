@@ -8,6 +8,9 @@
   "repository": "JeffLeFoll/slate-idb-store",
   "license": "Apache-2.0",
   "dependencies": {
-    "chai-as-promised": "^6.0.0"
+  },
+  "scripts": {
+    "lint": "polymer lint --rules=polymer-2",
+    "test": "polymer test"
   }
 }

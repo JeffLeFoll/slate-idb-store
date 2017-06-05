@@ -17,25 +17,30 @@
 <body>
     <test-fixture id="StoreDefaultOptions">
         <template>
-            <slate-idb-store db-name="slate-idb-store-tests" object-store="unit-tests"></slate-idb-store>
+            <slate-idb-store db-name="slate-idb-store-default-tests" object-store="unit-tests"></slate-idb-store>
+        </template>
+    </test-fixture>
+
+    <test-fixture id="StoreCustomOptions">
+        <template>
+            <slate-idb-store db-name="slate-idb-store-options-tests" object-store="unit-tests" optional-parameters='{"keyPath": "plop"}'></slate-idb-store>
         </template>
     </test-fixture>
 
     <script>
         chai.should();
 
-        describe('store with default options', () => {
-            
+        describe('tests with default store', () => {
             var myDb;
-            before(function () {
+            before(() => {
                 myDb = fixture('StoreDefaultOptions');
             });
 
-            after(function () {
+            after(() => {
                 myDb.deleteDatabase();
             });
 
-            beforeEach(function () {
+            beforeEach(() => {
                 myDb.clear();
             });
 
@@ -47,8 +52,21 @@
                 return myDb.count().should.eventually.equal(3);
             });
 
+            it('Should retrieve an existing value', () => {
+                myDb.add('value 1', 1);
+
+                return myDb.get(1).should.eventually.equal('value 1');
+            });
+
+            it('Should retrieve all values', () => {
+                myDb.add('value 1', 1);
+                myDb.add('value 2', 2);
+                myDb.add('value 3', 3);
+
+                return myDb.getAll().should.eventually.include('value 1', 'value 2', 'value 3');
+            });
+
             it('Should update an existing value', () => {
-                
                 myDb.add('value 1', 1);
 
                 myDb.put('value 2', 1);
@@ -59,6 +77,57 @@
                 ])
             });
 
+            it('Should delete a given key', () => {
+                myDb.add('value 1', 1);
+                myDb.add('value 2', 2);
+                myDb.add('value 3', 3);
+
+                return Promise.all([
+                    myDb.delete(2).should.be.fulfilled,
+                    myDb.getAll().should.eventually.not.include('value 2')
+                ]);
+            });
+
+        });
+
+        describe('tests with custom options store', () => {
+            var myDbCustomOpts;
+            before(() => {
+                myDbCustomOpts = fixture('StoreCustomOptions');
+            });
+
+            after(() => {
+                myDbCustomOpts.deleteDatabase();
+            });
+
+            beforeEach(() => {
+                myDbCustomOpts.clear();
+            });
+
+            it('Should add 3 values', () => {
+                myDbCustomOpts.add({ plop: 'A', data: 'value 1' });
+                myDbCustomOpts.add({ plop: 'B', data: 'value 2' });
+                myDbCustomOpts.add({ plop: 'C', data: 'value 3' });
+
+                return myDbCustomOpts.count().should.eventually.equal(3);
+            });
+
+            it('Should retrieve an existing value', () => {
+                myDbCustomOpts.add({ plop: 'A', data: 'value 1' });
+
+                return myDbCustomOpts.get('A').should.eventually.eql({ plop: 'A', data: 'value 1' });
+            });
+
+            it('Should update an existing value', () => {
+                myDbCustomOpts.add({ plop: 'A', data: 'value 1' });
+
+                myDbCustomOpts.put({ plop: 'A', data: 'value 2' });
+
+                return Promise.all([
+                    myDbCustomOpts.count().should.eventually.equal(1),
+                    myDbCustomOpts.get('A').should.eventually.eql({ plop: 'A', data: 'value 2' })
+                ])
+            });
         });
     </script>
 </body>

@@ -1,5 +1,11 @@
 # slate-idb-store 
 
+This Polymer 2 element provide access to browser's IndexedDb using [Jake Archibald's idb API](https://github.com/jakearchibald/idb) (indexedDb with promises).
+
+## Why
+With Polymer, when loading external script with `<script src=''></script>` in more than one component this external script will be loaded multiple time whereas `<link rel='import' src=''>` are de-duplicated.
+That's why the best practice to use external lib in multiple components is throught a 'proxy' component like this one.
+
 ## Installation
 
 Add the dependency to the `bower.json` of your application:
@@ -30,9 +36,6 @@ And then recover them via `bower install`.
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
-
-
-## Credits
 
 
 ## License
