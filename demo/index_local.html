@@ -23,6 +23,9 @@ Copyright (c) 2017 Jean-François Le Foll "JeffLeFoll"
 
   <title>slate-font-awesome demo</title>
 
+  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+
   <script>
     // setup Polymer options
     window.Polymer = { lazyRegister: true, dom: 'shadow' };
@@ -35,15 +38,15 @@ Copyright (c) 2017 Jean-François Le Foll "JeffLeFoll"
       } else {
         // polyfill web components
         var e = document.createElement('script');
-        e.src = '../../webcomponentsjs/webcomponents-lite.js';
+        e.src = '../bower_components/webcomponentsjs/webcomponents-lite.js';
         document.head.appendChild(e);
       }
     })();
   </script>
 
-  <link rel="import" href="../../polymer/polymer-element.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../bower_components/polymer/polymer-element.html">
+  <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
 
   <link rel="import" href="../slate-idb-store.html">
 
@@ -64,7 +67,9 @@ Copyright (c) 2017 Jean-François Le Foll "JeffLeFoll"
         <dom-module id="slate-idb-store-default">
           <template>
             <style></style>
-            <slate-idb-store db-name="slate-idb-store-default" object-store="demo"></slate-idb-store>
+
+            <slate-idb-store id="store" db-name="slate-idb-store-default" object-store="demo"></slate-idb-store>
+
             <p>The value stored is {{ plop }}</p>
           </template>
 
@@ -75,9 +80,10 @@ Copyright (c) 2017 Jean-François Le Foll "JeffLeFoll"
               connectedCallback() {
                 super.connectedCallback();
 
-                this.$;
+                this.shadowRoot.querySelector('slate-idb-store').put('value', 1);
 
               }
+
             }
             window.customElements.define(SlateIdbStoreDefault.is, SlateIdbStoreDefault);
           </script>
